@@ -19,10 +19,10 @@ files[] = views/handlers/tmgmt_i18n_string.plugin.inc
 files[] = sources/entity/osha_tmgmt_entity.plugin.inc
 files[] = sources/entity/osha_tmgmt.entity.job_item.inc
 files[] = sources/i18n_string/tmgmt_i18n_string.plugin.inc
+files[] = sources/node/osha_tmgmt_node.plugin.inc
+files[] = translators/file/osha_tmgmt_file.plugin.inc
 
 ; Translator integration
-files[] = osha_tmgmt_node.plugin.inc
-files[] = osha_tmgmt_file.plugin.inc
 files[] = osha_tmgmt.format.cdt.inc
 
 files[] = osha_tmgmt.test
