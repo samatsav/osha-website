@@ -612,7 +612,6 @@ function osha_tmgmt_field_populate_entity($entity_type, $entity, $langcode, $dat
         if (!isset($entity->{$field_name}[$delta])) {
           $entity->{$field_name}[$delta] = array();
         }
-        dpm($entity->{$field_name}[$delta]);
         $entity->{$field_name}[$delta] = $columns;
       }
     }

@@ -200,7 +200,6 @@ class OSHATranslatorFileformatCDT extends XMLWriter {
 
     $flat_data = $this->getImportedTargets($job);
     $data = tmgmt_unflatten_data($flat_data);
-    dpm($data);
     return $data;
   }
 
