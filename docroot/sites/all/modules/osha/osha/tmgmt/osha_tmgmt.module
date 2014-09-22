@@ -633,6 +633,13 @@ class OshaTMGMTStatistics {
   protected static function count($item, &$count) {
     if (!empty($item['#text'])) {
       if (_tmgmt_filter_data($item)) {
+        $alts = array();
+        preg_match_all('/alt="([^"]*)"/i', $item['#text'], $alts);
+        if (!empty($alts)) {
+          foreach ($alts[1] as $text) {
+            $count += strlen(str_replace(" ", "", $text));
+          }
+        }
         $count += strlen(str_replace("&nbsp;", "", preg_replace("/\s+/", "", strip_tags($item['#text']))));
       }
     }
