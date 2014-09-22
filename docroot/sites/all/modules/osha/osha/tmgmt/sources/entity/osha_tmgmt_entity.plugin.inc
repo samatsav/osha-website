@@ -40,9 +40,28 @@ class OSHATMGMTEntitySourcePluginController extends TMGMTEntitySourcePluginContr
 
   public static function getNodeData(TMGMTJobItem $job_item) {
     $node = node_load($job_item->item_id);
+
+
     // Get all the fields that can be translated and arrange their values into
     // a specific structure.
     $data = tmgmt_field_get_source_data('node', $node, $job_item->getJob()->source_language);
+    $menu = menu_link_get_preferred('node/' . $node->nid);
+    if (isset($menu['link_title'])) {
+      $data['link_title'] = array(
+        '#label' => 'Link name',
+        'value' => array(
+          '#label' => 'Meta Tags Title',
+          '#text' => $menu['link_title'],
+          '#translate' => TRUE,
+        ),
+        'format' => array(
+          '#label' => '',
+          '#text' => 'plain_text',
+          '#translate' => FALSE,
+        ),
+      );
+    }
+
     if (isset($node->metatags['en'])) {
       $meta = $node->metatags['en'];
       $data_metatags = array();
