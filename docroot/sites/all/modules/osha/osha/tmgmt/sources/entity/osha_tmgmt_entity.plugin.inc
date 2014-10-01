@@ -41,7 +41,6 @@ class OSHATMGMTEntitySourcePluginController extends TMGMTEntitySourcePluginContr
   public static function getNodeData(TMGMTJobItem $job_item) {
     $node = node_load($job_item->item_id);
 
-
     // Get all the fields that can be translated and arrange their values into
     // a specific structure.
     $data = tmgmt_field_get_source_data('node', $node, $job_item->getJob()->source_language);
