@@ -61,45 +61,58 @@ class OSHATranslatorFileformatCDT extends XMLWriter {
     $this->writeElement('Keywords', 'NO KEYWORDS');
 
     foreach ($item->getData() as $key => $field) {
-      $text = NULL;
+      $texts = array();
+      $fields = array();
       if ($key == "node_title") {
         continue;
       }
       if (isset($field['#text'])) {
-        $text = $field['#text'];
+        $texts[$key] = $field['#text'];
       }
       elseif (isset($field['value']['#text'])) {
-        $text = $field['value']['#text'];
+        $texts[$key] = $field['value']['#text'];
       }
-      elseif (isset($field[0]['value']['#text'])) {
-        $text = $field[0]['value']['#text'];
-      }
-
-      if (!empty($text)) {
-        $this->startElement('DynamicElement');
-        $this->writeAttribute('dynamicElementKind', 'TextArea');
-        $this->writeAttribute('indexType', $item->item_type);
-        $this->writeAttribute('instanceId', $item->item_id);
-
-        // Construct the name key flattened.
-        $data = array_filter(tmgmt_flatten_data($field), '_tmgmt_filter_data');
-        reset($data);
-        $name_attr = '][' . $key;
-        $data_key = key($data);
-        // On menu and strings there is no key for $data.
-        if (!empty($data_key)) {
-          $name_attr .= '][' . $data_key;
+      else {
+        foreach ($field as $field_key => $field_value) {
+          if (isset($field_value['value']['#text'])) {
+            $texts[$field_key] = $field_value['value']['#text'];
+            $fields[$field_key] = $field_value;
+          }
         }
+      }
 
-        $this->writeAttribute('name', $name_attr);
+      foreach ($texts as $text_key => $text) {
+        if (!empty($text)) {
+          $this->startElement('DynamicElement');
+          $this->writeAttribute('dynamicElementKind', 'TextArea');
+          $this->writeAttribute('indexType', $item->item_type);
+          $this->writeAttribute('instanceId', $item->item_id);
 
-        $this->writeAttribute('repeatable', 'false');
-        $this->startElement('DynamicContent');
-        $this->writeCdata($text);
-        // </DynamicContent>
-        $this->endElement();
-        // </DynamicElement>
-        $this->endElement();
+          // Construct the name key flattened.
+          if (!isset($fields[$text_key])) {
+            $data = array_filter(tmgmt_flatten_data($field), '_tmgmt_filter_data');
+          }
+          else {
+            $data = array_filter(tmgmt_flatten_data(array($text_key => $fields[$text_key])), '_tmgmt_filter_data');
+          }
+          reset($data);
+          $name_attr = '][' . $key;
+          $data_key = key($data);
+          // On menu and strings there is no key for $data.
+          if (!empty($data_key)) {
+            $name_attr .= '][' . $data_key;
+          }
+          $this->writeAttribute('name', $name_attr);
+
+          $this->writeAttribute('repeatable', 'false');
+          $this->startElement('DynamicContent');
+          $this->writeCdata($text);
+          // </DynamicContent>
+          $this->endElement();
+          // </DynamicElement>
+          $this->endElement();
+          unset($data[$data_key]);
+        }
       }
     }
     // </Translation>
