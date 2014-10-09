@@ -151,7 +151,7 @@ class OshaMigrateFiles extends DynamicMigration {
     $alias = array(
       'source' => 'file/' . $entity->fid,
       'alias' => $path,
-      'language' => $language,
+      'language' => LANGUAGE_NONE,
     );
     path_save($alias);
   }
